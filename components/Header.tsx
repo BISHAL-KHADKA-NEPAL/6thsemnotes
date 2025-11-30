@@ -75,9 +75,10 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header className="flex flex-wrap md:flex-nowrap items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-4 md:px-10 py-3 mb-5 bg-white dark:bg-background-dark sticky top-0 z-50">
-        <div className="flex items-center gap-4 text-slate-800 dark:text-slate-200">
-          <div className="size-6 text-primary">
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-solid border-slate-200 dark:border-slate-800 px-4 md:px-10 py-3 mb-5 bg-white dark:bg-background-dark sticky top-0 z-50">
+        {/* Logo and Title */}
+        <div className="flex items-center gap-2 md:gap-4 text-slate-800 dark:text-slate-200">
+          <div className="size-6 text-primary flex-shrink-0">
             <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0_6_543)">
                 <path d="M42.1739 20.1739L27.8261 5.82609C29.1366 7.13663 28.3989 10.1876 26.2002 13.7654C24.8538 15.9564 22.9595 18.3449 20.6522 20.6522C18.3449 22.9595 15.9564 24.8538 13.7654 26.2002C10.1876 28.3989 7.13663 29.1366 5.82609 27.8261L20.1739 42.1739C21.4845 43.4845 24.5355 42.7467 28.1133 40.548C30.3042 39.2016 32.6927 37.3073 35 35C37.3073 32.6927 39.2016 30.3042 40.548 28.1133C42.7467 24.5355 43.4845 21.4845 42.1739 20.1739Z"></path>
@@ -90,51 +91,50 @@ export const Header: React.FC = () => {
               </defs>
             </svg>
           </div>
-          <h2 className="text-slate-800 dark:text-slate-200 text-lg font-bold leading-tight tracking-[-0.015em]">
+          <h2 className="text-slate-800 dark:text-slate-200 text-base md:text-lg font-bold leading-tight tracking-[-0.015em]">
             BBA 6TH SEM
           </h2>
         </div>
 
-        {/* Universal Search */}
-        <div className="flex w-full md:w-auto md:flex-1 justify-center px-0 md:px-8 order-3 md:order-2 mt-3 md:mt-0">
-          <UniversalSearch />
+        {/* Auth Buttons - Desktop and Mobile */}
+        <div className="flex items-center gap-2 order-2">
+          {user ? (
+            <>
+              <NotificationsDropdown userId={user.id} />
+              <button
+                onClick={() => setIsProfileModalOpen(true)}
+                className="flex items-center justify-center size-10 rounded-full bg-[#E6B68E] hover:opacity-90 transition-opacity overflow-hidden"
+              >
+                {profile?.avatar_url ? (
+                  <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="text-white font-bold text-sm">
+                    {profile?.full_name ? profile.full_name[0].toUpperCase() : user.email?.[0].toUpperCase()}
+                  </div>
+                )}
+              </button>
+            </>
+          ) : (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => openAuthModal('login')}
+                className="px-3 md:px-4 py-2 text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-500 transition-colors"
+              >
+                Log In
+              </button>
+              <button
+                onClick={() => openAuthModal('signup')}
+                className="px-3 md:px-4 py-2 text-sm font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
+              >
+                Sign Up
+              </button>
+            </div>
+          )}
         </div>
 
-        <div className="flex justify-end items-center gap-8 order-2 md:order-3">
-          <div className="flex items-center gap-4">
-            {user ? (
-              <>
-                <NotificationsDropdown userId={user.id} />
-                <button
-                  onClick={() => setIsProfileModalOpen(true)}
-                  className="flex items-center justify-center size-10 rounded-full bg-[#E6B68E] hover:opacity-90 transition-opacity overflow-hidden"
-                >
-                  {profile?.avatar_url ? (
-                    <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="text-white font-bold text-sm">
-                      {profile?.full_name ? profile.full_name[0].toUpperCase() : user.email?.[0].toUpperCase()}
-                    </div>
-                  )}
-                </button>
-              </>
-            ) : (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => openAuthModal('login')}
-                  className="px-4 py-2 text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-500 transition-colors"
-                >
-                  Log In
-                </button>
-                <button
-                  onClick={() => openAuthModal('signup')}
-                  className="px-4 py-2 text-sm font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
-                >
-                  Sign Up
-                </button>
-              </div>
-            )}
-          </div>
+        {/* Universal Search - Full Width on Mobile */}
+        <div className="w-full order-3">
+          <UniversalSearch />
         </div>
       </header>
 
